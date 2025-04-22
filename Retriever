@@ -1,0 +1,27 @@
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_text_splitters import CharacterTextSplitter
+
+def main():
+    # 1. Load your document
+    with open('new-Policies.txt', 'r', encoding='utf-8') as f:
+        policy_text = f.read()
+    
+    # 2. Split into chunks
+    splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    chunks = splitter.split_text(policy_text)
+    
+    # 3. Create embeddings and vector store
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    vector_db = FAISS.from_texts(chunks, embeddings)
+    
+    # 4. Query for "Email policy"
+    results = vector_db.similarity_search("Email policy", k=2)
+    
+    # 5. Display results (for your screenshot)
+    print("=== Top 2 Results for 'Email policy' ===")
+    for i, doc in enumerate(results):
+        print(f"\nRESULT {i+1}:\n{doc.page_content}\n")
+
+if __name__ == "__main__":
+    main()
