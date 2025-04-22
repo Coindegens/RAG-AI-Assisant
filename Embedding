@@ -1,0 +1,19 @@
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+# Load lightweight embedding model (no internet required after first download)
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Embed the query
+query = "How are you?"
+embedding = model.encode(query)
+
+# Format output for screenshot
+print("="*60)
+print("EMBEDDING OUTPUT (using sentence-transformers)")
+print("="*60)
+print(f"\nQuery: '{query}'")
+print(f"\nEmbedding vector length: {len(embedding)} dimensions")
+print("\nFirst 5 numbers in embedding vector:")
+print(np.array2string(embedding[:5], precision=8, separator=', '))
+print("="*60)
