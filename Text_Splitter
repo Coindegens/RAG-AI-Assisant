@@ -1,0 +1,39 @@
+from langchain.text_splitter import CharacterTextSplitter
+
+latex_text = """
+The earliest LLMs were developed in the 1980s and 1990s, but they were limited by the amount of data that could be processed and the computational power available at the time. In the past decade, however, advances in hardware and software have made it possible to train LLMs on massive datasets, leading to significant improvements in performance.
+
+\subsection{Applications of LLMs}
+
+LLMs have many applications in the industry, including chatbots, content creation, and virtual assistants. They can also be used in academia for research in linguistics, psychology, and computational linguistics.
+
+\end{document}
+"""
+
+def main():
+    # Initialize the text splitter with optimal parameters for LaTeX
+    text_splitter = CharacterTextSplitter(
+        chunk_size=150,       # Size of each chunk (in characters)
+        chunk_overlap=30,     # Overlap between chunks
+        separator="\n\n",     # Split at paragraph breaks
+        is_separator_regex=False
+    )
+    
+    # Split the text
+    splits = text_splitter.split_text(latex_text)
+    
+    # Print formatted output for screenshot
+    print("="*60)
+    print("TEXT SPLITTER OUTPUT")
+    print("="*60)
+    print(f"\nOriginal text length: {len(latex_text)} characters")
+    print(f"Number of chunks created: {len(splits)}\n")
+    print("-"*60)
+    
+    for i, chunk in enumerate(splits, 1):
+        print(f"CHUNK {i} ({len(chunk)} chars):")
+        print(chunk)
+        print("-"*60)
+
+if __name__ == "__main__":
+    main()
