@@ -87,6 +87,7 @@ pip install -r requirements.txt
 - PyPDF2
 - Gradio
 - Sentence Transformers
+- Hugging Face / OpenAI 
 - Additional dependencies in requirements.txt
 
 ## Contributing
