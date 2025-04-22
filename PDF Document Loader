@@ -1,0 +1,25 @@
+from langchain_community.document_loaders import PyPDFLoader  # Updated import
+
+pdf_url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/WgM1DaUn2SYPcCg_It57tA/A-Comprehensive-Review-of-Low-Rank-Adaptation-in-Large-Language-Models-for-Efficient-Parameter-Tuning-1.pdf"
+
+def main():
+    try:
+        # Load the PDF
+        loader = PyPDFLoader(pdf_url)
+        pages = loader.load()
+        
+        # Clean output for screenshot
+        print("="*50)
+        print("DOCUMENT LOADER OUTPUT")
+        print("="*50)
+        print(f"\nTotal pages loaded: {len(pages)}\n")
+        print("-"*50)
+        print("First 1000 characters:\n")
+        print(pages[0].page_content[:1000])
+        print("="*50)
+        
+    except Exception as e:
+        print(f"Error: {e}")
+
+if __name__ == "__main__":
+    main()
