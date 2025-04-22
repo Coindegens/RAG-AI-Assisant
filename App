@@ -1,0 +1,61 @@
+import os
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface.embeddings import HuggingFaceEmbeddings
+from langchain.chains import RetrievalQA
+from langchain_openai import ChatOpenAI
+import gradio as gr
+
+# 1. Configuration - Replace with your actual API key
+API_KEY = ".env"ctr
+def load_documents():
+    pdf_path = "A_Comprehensive_Review_of_Low_Rank_Adaptation_in_Large_Language_Models_for_Efficient_Parameter_Tuning-1.pdf"
+    loader = PyPDFLoader(pdf_path)
+    return loader.load()
+
+# 3. Vector Store
+def create_vectordb(docs):
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    return FAISS.from_documents(docs, embeddings)
+
+# 4. QA System
+def create_qa_chain(db):
+    llm = ChatOpenAI(
+        model="gpt-3.5-turbo",
+        api_key=API_KEY,
+        temperature=0
+    )
+    return RetrievalQA.from_chain_type(
+        llm=llm,
+        retriever=db.as_retriever(search_kwargs={"k": 2})
+    )
+
+# 5. Gradio Interface
+with gr.Blocks(title="Research QA Bot") as app:
+    gr.Markdown("# 📚 Research Paper QA Bot")
+    
+    # Initialize components
+    docs = load_documents()
+    db = create_vectordb(docs)
+    qa_chain = create_qa_chain(db)
+    
+    with gr.Row():
+        question = gr.Textbox(label="Your Question", placeholder="What this paper is talking about?")
+        output = gr.Textbox(label="Answer", interactive=False)
+    
+    examples = gr.Examples(
+        examples=["What is LoRA?", "How does low-rank adaptation work?"],
+        inputs=[question]
+    )
+    
+    def respond(question):
+        return qa_chain.invoke({"query": question})["result"]
+    
+    question.submit(respond, inputs=[question], outputs=[output])
+
+if __name__ == "__main__":
+    app.launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        show_api=False
+    )
