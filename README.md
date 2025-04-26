@@ -1,4 +1,4 @@
-# AI RESEARCH QUERY ASSISTANT WITH WEB INTERFACE GRADIO (LANGCHAIN & RAG)
+# AI RESEARCH QUERY AGENT WITH WEB INTERFACE GRADIO (LANGCHAIN & RAG)
 
 ## Overview
 An AI-powered RAG (Retrieval-Augmented Generation) assistant built with LangChain and Gradio web interface. This application optimizes research endeavors by processing documents, generating embeddings, and providing an interactive QA interface.
